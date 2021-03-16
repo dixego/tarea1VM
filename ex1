@@ -1,0 +1,6 @@
+(problem
+  (model
+    (1 (p q) (2))
+    (2 (q r) (1)))
+  (state 2)
+  (formula (eg q)))
