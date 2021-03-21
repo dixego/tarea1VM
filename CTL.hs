@@ -2,6 +2,7 @@ module CTL where
 
 import SExpr
 
+-- Type representing CTL formulas.
 data CTL
   = TTrue
   | TFalse
@@ -15,6 +16,20 @@ data CTL
   | TEg CTL
   deriving (Show, Ord, Eq)
 
+-- S-Expression parser for CTL formulas.
+-- A CTL S-Expression is one of the following:
+-- CTLS := 
+-- | true
+-- | false
+-- | p | q | r |...|
+-- (any symbol other than `true` or `false` will be parsed as a propositional variable)
+-- | (and CTLS CTLS ...) (n-ary conjunction e.g. (and p q r s))
+-- | (or CTLS CTLS ...) (n-ary disjunction)
+-- | (not CTLS)
+-- | (ex CTLS)
+-- | (ax CTLS)
+-- | (ef CTLS)
+-- | (eg CTLS)
 parseCTL :: SExpr -> CTL
 parseCTL (Sym "true") = TTrue
 parseCTL (Sym "false") = TTrue
@@ -26,4 +41,4 @@ parseCTL (List [Sym "ex", p]) = TEx $ parseCTL p
 parseCTL (List [Sym "ax", p]) = TAx $ parseCTL p
 parseCTL (List [Sym "ef", p]) = TEf $ parseCTL p
 parseCTL (List [Sym "eg", p]) = TEg $ parseCTL p
-parseCTL _ = error "NOPE"
+parseCTL _ = error "Not a valid CTL formula."

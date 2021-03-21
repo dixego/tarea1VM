@@ -9,6 +9,9 @@ import Text.Parsec.Language (haskell)
 
 import Data.Either (fromRight)
 
+-- Type representing simple S-Expressions consisting of integers,
+-- quoted strings, symbols (i.e. anything that's not a quoted string or an integer)
+-- and nested lists of S-Expressions
 data SExpr
   = Num Integer
   | Str String
@@ -18,6 +21,7 @@ data SExpr
 
 type Parser = Parsec String ()
 
+-- S-Expression parser
 sExpr :: Parser SExpr
 sExpr = tExpr
   where
@@ -29,7 +33,7 @@ sExpr = tExpr
       (Sym <$> many1 (noneOf "()\"\t\n\r "))
     tList = List <$> between (char '(') (char ')') (many tExpr)
 
-
+-- Tries to parse an S-Expression from a string. Returns `Nothing` if parsing fails
 parseSExpr :: String -> Maybe SExpr
 parseSExpr s = case (parse sExpr "" s) of
   Left _ -> Nothing

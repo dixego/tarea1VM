@@ -1,0 +1,8 @@
+(problem
+  (model
+    (0 (p q) (1 2))
+    (1 (q r) (0 2))
+    (2 (r) (2)))
+  (state 0)
+  (formula (not (eg (not (and (not p) (not q) r))))))
+
